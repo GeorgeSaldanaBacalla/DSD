@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:body>
+        <ui:composition template="templates/mainPage.xhtml">
+            <ui:define name="content">
+                <h:form id="citasForm">
+                    <div class="row">
+                        <div class="col-md-8"><h3>Registrar cita</h3></div>
+                        <div class="col-md-4">
+                            <div class="btn-group btn-group-justified" role="group">
+                                <h:commandLink styleClass="btn btn-default" 
+                                              
+                                               action="#{citasManaged.registrarCita()}"
+                                              >Guardar
+                                </h:commandLink>
+                                <h:commandLink styleClass="btn btn-default" action="listadoDoctores?faces-redirect=true">Regresar   </h:commandLink>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p:messages id="messages" showDetail="false" autoUpdate="false" closable="true"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h:panelGroup id="panel">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Datos de mascota</div>
+                                    <div class="panel-body">
+                                        <div class="row">
+
+                                            <div class="form-group">
+                                                <label for="txtCodigo" class="col-sm-1 control-label">Cliente</label>
+                                                <div class="col-sm-2">
+                                                    <h:inputText value="#{citasManaged.dni}" styleClass="form-control"/>
+                                                </div>
+                                                <div class="col-sm-1">
+                                                    <p:commandLink ajax="true" styleClass="btn btn-default" action="#{citasManaged.buscarCliente()}" update="@form citasForm:panel" process="citasForm:panel">Buscar</p:commandLink>
+                                                </div>    
+                                                <div class="col-sm-4">
+                                                    <h:inputText disabled="true" value="#{citasManaged.cliente.nombre}" styleClass="form-control"/>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <h:commandLink styleClass="btn btn-default"  rendered="#{citasManaged.mostrarRegistrarCliente}" action="#{citasManaged.registrarCliente()}">Registrar Cliente</h:commandLink>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="form-group">
+                                                <label for="txtCodigo" class="col-sm-1 control-label">Mascota</label>
+                                                <div class="col-sm-3">
+                                                    <h:selectOneMenu styleClass="form-control" value="#{citasManaged.idMascota}">
+                                                        <f:selectItems id="lstMascota" 
+                                                                       value="#{citasManaged.listMascota}"
+                                                                       var="mas"
+                                                                       itemValue="#{mas.idMascota}"
+                                                                       itemLabel="#{mas.nombre} - #{mas.raza}"/>
+
+                                                    </h:selectOneMenu>
+                                                </div>
+                                                <div class="col-sm-2">
+                                                    <p:commandLink styleClass="btn btn-default"  value="Registrar Mascota" rendered="#{citasManaged.mostrarRegistrarMascota}" action="#{citasManaged.registrarMascota()}"/>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                            <h:panelGroup id="panelCita">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading">Datos de la cita</div>
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-1">Doctor</div>
+                                            <div class="col-md-3">
+                                                <h:selectOneMenu styleClass="form-control" value="#{citasManaged.idDoctor}">
+
+                                                    <f:selectItems id="lstDoctor" 
+                                                                   value="#{listadoDoctoresManaged.listaDoctores}"
+                                                                   var="doc"
+                                                                   itemValue="#{doc.idDoctor}"
+                                                                   itemLabel="#{doc.idDoctor} - #{doc.apePaterno}, #{doc.nombre}"/>
+
+                                                </h:selectOneMenu></div>     
+                                            <div class="col-md-1">Fecha</div>
+                                            <div class="col-md-3">
+                                                <p:calendar value="#{citasManaged.diaCita}"/>
+                                            </div> 
+                                            <div class="col-md-1">
+                                                <p:commandLink ajax="true" action="#{citasManaged.buscarDisponibilidad()}" styleClass="btn btn-default"  update="@form citasForm:panelCita" process="citasForm:panelCita">Buscar disponibilidad</p:commandLink>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h:outputText rendered="#{citasManaged.noExisteHorario}" value="* El doctor no trabaja este día" style="color:red;font-size: medium"/>
+                                            </div>
+                                        </div>
+                                        <h:panelGroup rendered="#{!citasManaged.noExisteHorario}">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h:outputText value="El horario del doctor para el "/>
+                                                    <h:outputText value="#{citasManaged.horarioDoctor.fechaEntrada}">
+                                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                                    </h:outputText>
+                                                    <h:outputText value=" es de las "/>
+                                                    <h:outputText value="#{citasManaged.horarioDoctor.fechaEntrada}">
+                                                        <f:convertDateTime pattern="hh:mm a" timeZone="America/Lima"/>
+                                                    </h:outputText>
+                                                    <h:outputText value=" hasta las "/>
+                                                    <h:outputText value="#{citasManaged.horarioDoctor.fechaSalida}">
+                                                        <f:convertDateTime pattern="hh:mm a" timeZone="America/Lima"/>
+                                                    </h:outputText>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <h:dataTable value="#{citasManaged.listaDisponibilidad}"
+                                                                 var="dis" class="table table-bordered table-condensed">
+                                                        <h:column>
+                                                            <h:selectBooleanCheckbox value="#{dis.select}"/>
+                                                        </h:column>
+                                                        <h:column>
+                                                            <h:outputText value="#{dis.hora}">
+                                                                <f:convertDateTime pattern="HH:mm" timeZone="America/Lima"/>
+                                                            </h:outputText>
+                                                        </h:column>
+                                                    </h:dataTable>
+                                                </div>
+                                            </div>
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                            </h:panelGroup>
+                        </div>
+                    </div>
+
+                </h:form>
+            </ui:define>
+        </ui:composition>  
+    </h:body>
+</html>
+

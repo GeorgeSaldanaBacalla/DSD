@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="templates/mainPage.xhtml">
+            <ui:define name="content">
+                <h:form id="mascotaForm">   
+                    <div class="row">
+                        <div class="col-md-8"><h3>Mascotas</h3></div>
+                        <div class="col-md-4">
+                            <div class="btn-group btn-group-justified" role="group">
+
+                                <h:commandLink styleClass="btn btn-default" action="#{mascotaManaged.guardarMascota()}">Guardar</h:commandLink>
+
+                                <h:commandLink styleClass="btn btn-default" action="listadoClientes?faces-redirect=true">Regresar</h:commandLink>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 5px">
+                        <div class="col-md-1">Cliente</div>
+                        <div class="col-md-5">
+                            <h:selectOneMenu styleClass="form-control" value="#{mascotaManaged.idCliente}">
+                                <p:ajax process="@form @this" update="mascotaForm:panelLista" event="change" listener="#{mascotaManaged.listarMascotas()}"/>
+                                <f:selectItems id="lstDoctor" 
+                                               value="#{listadoClientesManaged.listaClientes}"
+                                               var="doc"
+                                               itemValue="#{doc.idcliente}"
+                                               itemLabel="#{doc.dni} - #{doc.apePaterno}, #{doc.nombre}"/>
+
+                            </h:selectOneMenu></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="txtCodigo" class="col-sm-3 control-label">Codigo</label>
+                                <div class="col-sm-4">
+                                    <h:inputText value="#{mascotaManaged.mascota.idMascota}" disabled="true" styleClass="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="txtCodigo" class="col-sm-3 control-label">Nombre</label>
+                                <div class="col-sm-4">
+                                    <h:inputText value="#{mascotaManaged.mascota.nombre}" styleClass="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="txtCodigo" class="col-sm-3 control-label">Apellido</label>
+                                <div class="col-sm-4">
+                                    <h:inputText value="#{mascotaManaged.mascota.apellido}" styleClass="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="txtCodigo" class="col-sm-3 control-label">Raza</label>
+                                <div class="col-sm-4">
+                                    <h:inputText value="#{mascotaManaged.mascota.raza}" styleClass="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="txtCodigo" class="col-sm-3 control-label">Edad</label>
+                                <div class="col-sm-4">
+                                    <h:inputText value="#{mascotaManaged.mascota.edad}" styleClass="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-5">
+                            <div class="form-group">
+                                <label for="txtCodigo" class="col-sm-3 control-label">Peso</label>
+                                <div class="col-sm-4">
+                                    <h:inputText value="#{mascotaManaged.mascota.peso}" styleClass="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h:panelGroup id="panelLista">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h:dataTable id="mascotaTable" value="#{mascotaManaged.listaMascota}"
+                                             var="mas" styleClass="table table-bordered table-condensed">
+                                    <h:column>
+                                        <f:facet name="header">Nombre</f:facet>
+                                        <h:outputText value="#{mas.nombre}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Apellido</f:facet>
+                                        <h:outputText value="#{mas.apellido}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Raza</f:facet>
+                                        <h:outputText value="#{mas.raza}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Edad</f:facet>
+                                        <h:outputText value="#{mas.edad}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Peso</f:facet>
+                                        <h:outputText value="#{mas.peso}"/>
+                                    </h:column>
+                                    <h:column>
+                                        <f:facet name="header">Eliminar</f:facet>
+                                        <h:commandLink action="#{mascotaManaged.eliminarMascota(mas.idMascota)}" title="Eliminar">
+                                            <span class="glyphicon glyphicon-trash"/>
+                                        </h:commandLink>
+                                    </h:column>                                
+
+                                </h:dataTable>
+                            </div>
+                        </div>
+                    </h:panelGroup>
+                </h:form>
+            </ui:define>
+        </ui:composition>   
+    </h:body>
+</html>
+

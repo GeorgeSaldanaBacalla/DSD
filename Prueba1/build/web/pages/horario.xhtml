@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:body>
+        <ui:composition template="templates/mainPage.xhtml">
+            <ui:define name="content">
+                <h:form id="horarioForm">   
+                    <div class="row">
+                        <div class="col-md-8"><h3>Horario</h3></div>
+                        <div class="col-md-4">
+                            <div class="btn-group btn-group-justified" role="group">
+
+                                <h:commandLink styleClass="btn btn-default" action="#{horarioManaged.registrar()}">Guardar</h:commandLink>
+
+                                <h:commandLink styleClass="btn btn-default" action="listadoDoctores?faces-redirect=true">Cancelar</h:commandLink>
+
+                            </div>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                     <div class="row">
+                        <div class="col-md-8">
+                            <p:messages id="messages" showDetail="false" autoUpdate="true" closable="true"/>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-bottom: 5px">
+                        <div class="col-md-1">Doctor</div>
+                        <div class="col-md-5">
+                            <h:selectOneMenu styleClass="form-control" value="#{horarioManaged.idDoctor}">
+                                <p:ajax process="@form inline @this" update="horarioForm:panel" event="change" listener="#{horarioManaged.buscarHorario}"/>
+                                <f:selectItems id="lstDoctor" 
+                                               value="#{listadoDoctoresManaged.listaDoctores}"
+                                               var="doc"
+                                               itemValue="#{doc.idDoctor}"
+                                               itemLabel="#{doc.idDoctor} - #{doc.apePaterno}, #{doc.nombre}"/>
+
+                            </h:selectOneMenu></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-1">Día</div>
+                        <div class="col-md-3">
+                            <p:calendar id="inline" value="#{horarioManaged.dia}" mode="inline" >
+                                <p:ajax process="@form inline @this" update="horarioForm:panel" event="dateSelect" listener="#{horarioManaged.buscarHorario}"/>
+                            </p:calendar>
+                        </div>
+                        <div class="col-md-3">
+                            <p:panelGrid columns="2" >
+                                <h:outputText value="Entrada"/>
+                                <h:outputText value="08:00 am"/>
+
+                                <h:outputText value="Salida"/>
+                                <h:outputText value="08:00 pm"/>
+                            </p:panelGrid>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h:panelGroup id="panel">
+                                <p:dataTable id="data" value="#{horarioManaged.listaHorario}" var="hor">
+                                    <p:column headerText="fecha">
+                                        <h:outputText value="#{hor.fechaEntrada}">
+                                            <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="entrada">
+                                        <h:outputText value="#{hor.fechaEntrada}">
+                                            <f:convertDateTime pattern="HH:mm" timeZone="America/Lima"/>
+                                        </h:outputText>
+                                    </p:column>
+                                    <p:column headerText="salida">
+                                        <h:outputText value="#{hor.fechaSalida}">
+                                            <f:convertDateTime pattern="HH:mm" timeZone="America/Lima"/>
+                                        </h:outputText>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGroup>
+
+                        </div>
+                    </div>
+                </h:form>
+            </ui:define>
+        </ui:composition>   
+    </h:body>
+</html>
+
