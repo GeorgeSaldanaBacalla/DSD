@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated 11/06/2015 06:29:29 PM by Hibernate Tools 4.3.1 -->
+<hibernate-mapping>
+    <class name="pe.com.soappet.dominio.Cita" table="cita" catalog="soapet" optimistic-lock="version">
+        <id name="idCita" type="int">
+            <column name="idCita" />
+            <generator class="assigned" />
+        </id>
+        <property name="idmascota" type="java.lang.Integer">
+            <column name="idmascota" />
+        </property>
+        <property name="iddoctor" type="java.lang.Integer">
+            <column name="iddoctor" />
+        </property>
+        <property name="fechaCita" type="timestamp">
+            <column name="fechaCita" length="19" />
+        </property>
+    </class>
+</hibernate-mapping>
